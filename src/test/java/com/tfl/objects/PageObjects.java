@@ -26,9 +26,36 @@ public class PageObjects extends Utilities {
 		} else
 			return false;
 	}
-	
+
 	public static boolean checkPlanJourneyVisibiltiy(String text) {
-		String xpath ="//*[text()='"+text+"']/parent::h1";//this is done so in future if the header chages we just need to update feature file
+		String xpath = "//*[text()='" + text + "']/parent::h1";// this is done so in future if the header changes we just
+																// need to update feature file
+		return checkVisibilityOfElement(xpath).isDisplayed();
+	}
+
+	public static boolean clickOnButton(String text) {
+		String xpath = "(//input[@value='" + text + "'])[1]";
+		WebElement ele = checkVisibilityOfElement(xpath);
+		if (ele.isEnabled()) {
+			ele.click();
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+	
+	public static boolean validateFromErrorMsg(String text) {
+		//this is written in this way so in future if only error message changes then we just need to update feature file without
+		//changing the code
+		String xpath ="//span[@id='InputFrom-error'][text()='"+text+"']";
+		return checkVisibilityOfElement(xpath).isDisplayed();
+	}
+	
+	public static boolean validateToErrorMsg(String text) {
+		//this is written in this way so in future if only error message changes then we just need to update feature file without
+		//changing the code
+		String xpath ="//span[@id='InputTo-error'][text()='"+text+"']";
 		return checkVisibilityOfElement(xpath).isDisplayed();
 	}
 
