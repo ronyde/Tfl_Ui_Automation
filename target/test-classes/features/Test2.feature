@@ -11,3 +11,5 @@ Feature: TFL unable to plan journey with no location input
     Then I get below error message
       | The From field is required. | From field error |
       | The To field is required.   | To field error   |
+    Then I am not able to view "Journey results" screen
+    And I close the browser

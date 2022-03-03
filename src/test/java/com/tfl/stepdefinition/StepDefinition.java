@@ -1,6 +1,7 @@
 package com.tfl.stepdefinition;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import org.junit.Assert;
 
@@ -9,6 +10,7 @@ import com.tfl.objects.PageObjects;
 import com.tfl.utilitymethods.Utilities;
 
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
@@ -32,14 +34,14 @@ public class StepDefinition {
 	}
 
 	@Then("I can able to view {string} screen")
-	public void i_can_view_plan_a_journey_screen(String text) throws IOException {
+	public void i_can_view_screen(String text) throws IOException {
 		try {
-			Assert.assertTrue(PageObjects.checkPlanJourneyVisibiltiy(text));
+			Assert.assertTrue(PageObjects.checkPageHeaderVisibiltiy(text));
 			Utilities.takeScreenshots();
-			System.out.println("Plan a Journey Screen is visible");
+			System.out.println(text + " " + "Screen is visible");
 		} catch (AssertionError e) {
 			Utilities.takeScreenshots();
-			System.out.println("Plan a Journey Screen is not visible due to::" + e.getMessage());
+			System.out.println(text + " " + "Screen is not visible" + e.getMessage());
 		}
 	}
 
@@ -49,7 +51,7 @@ public class StepDefinition {
 			switch (datatable.cell(i, 1)) {
 			case "Button":
 				try {
-					Assert.assertTrue(PageObjects.clickOnButton(datatable.cell(i, 0)));
+					Assert.assertTrue(PageObjects.javaScriptClick(datatable.cell(i, 0)));
 					Utilities.takeScreenshots();
 					System.out.println(datatable.cell(i, 0) + " " + "clicked");
 				} catch (AssertionError e) {
@@ -68,7 +70,7 @@ public class StepDefinition {
 		for (int i = 0; i < datatable.height(); i++) {
 			if (datatable.cell(i, 1).equalsIgnoreCase("From field error")) {
 				try {
-					
+
 					Assert.assertTrue(PageObjects.validateFromErrorMsg(datatable.cell(i, 0)));
 					Utilities.takeScreenshots();
 
@@ -103,6 +105,47 @@ public class StepDefinition {
 			System.out.println(failedFields);
 			Assert.fail();
 		}
+	}
+
+	@And("I close the browser")
+	public void i_close_the_browser() {
+		Utilities.closeBrowser();
+	}
+
+	@And("I select from destination as {string}")
+	public void i_select_from_destination(String destToSel) {
+
+		PageObjects.selectFromDestination(destToSel);
+	}
+
+	@Then("I select to destination as {string}")
+	public void i_select_to_destination_as(String destToSel) {
+		PageObjects.selectToDestination(destToSel);
+	}
+
+	@And("I verify journey details have been shown")
+	public void i_verify_journey_details_have_been_shown() {
+		if (PageObjects.verifyJourneyDetailsContainer()) {
+			System.out.println("Journey is planned successfully");
+		} else {
+			System.out.println("Journey is not planned successfully");
+			Assert.fail();
+		}
+	}
+
+	@When("i click on plan a journey on journey details screen")
+	public void i_click_on_plan_a_journey() {
+		PageObjects.clickOnPlanAJourney();
+	}
+
+	@Then("I am not able to view {string} screen")
+	public void i_am_not_able_to_view_screen(String headerName) {
+		if(PageObjects.verifyPageTitleNotVisible(headerName)) {
+			System.out.println("Journey Details page is getting displayed");
+			Assert.fail();
+		}
+		else
+			System.out.println("Journey Details page is not getting displayed");
 	}
 
 }
