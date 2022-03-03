@@ -21,8 +21,9 @@ public class StepDefinition {
 	}
 
 	@When("I click on {string} on the cookies pop up screen")
-	public void i_click_on_cookies_pop_up(String text) {
+	public void i_click_on_cookies_pop_up(String text) throws IOException {
 		try {
+			Utilities.takeScreenshots();
 			Assert.assertTrue(PageObjects.clickonAcceptCookies(text));
 			System.out.println("Cookies are accepted");
 		} catch (AssertionError e) {
@@ -31,24 +32,28 @@ public class StepDefinition {
 	}
 
 	@Then("I can able to view {string} screen")
-	public void i_can_view_plan_a_journey_screen(String text) {
+	public void i_can_view_plan_a_journey_screen(String text) throws IOException {
 		try {
 			Assert.assertTrue(PageObjects.checkPlanJourneyVisibiltiy(text));
+			Utilities.takeScreenshots();
 			System.out.println("Plan a Journey Screen is visible");
 		} catch (AssertionError e) {
+			Utilities.takeScreenshots();
 			System.out.println("Plan a Journey Screen is not visible due to::" + e.getMessage());
 		}
 	}
 
 	@When("I click on below element")
-	public void i_click_on_below_element(DataTable datatable) {
+	public void i_click_on_below_element(DataTable datatable) throws IOException {
 		for (int i = 0; i < datatable.height(); i++) {
 			switch (datatable.cell(i, 1)) {
 			case "Button":
 				try {
 					Assert.assertTrue(PageObjects.clickOnButton(datatable.cell(i, 0)));
+					Utilities.takeScreenshots();
 					System.out.println(datatable.cell(i, 0) + " " + "clicked");
 				} catch (AssertionError e) {
+					Utilities.takeScreenshots();
 					System.out.println(datatable.cell(i, 0) + " " + "is not clicked" + e.getMessage());
 					Assert.fail();
 				}
@@ -57,29 +62,33 @@ public class StepDefinition {
 	}
 
 	@Then("I get below error message")
-	public void i_got_below_error_message(DataTable datatable) {
+	public void i_got_below_error_message(DataTable datatable) throws IOException {
 		String passedFields = "", failedFields = "";
 		boolean flag = false;
 		for (int i = 0; i < datatable.height(); i++) {
 			if (datatable.cell(i, 1).equalsIgnoreCase("From field error")) {
 				try {
+					
 					Assert.assertTrue(PageObjects.validateFromErrorMsg(datatable.cell(i, 0)));
+					Utilities.takeScreenshots();
 
-					passedFields += datatable.cell(i, 1)+"\n";
+					passedFields += datatable.cell(i, 1) + "\n";
 
 				} catch (AssertionError e) {
-					failedFields += datatable.cell(i, 1)+"\n";
+					failedFields += datatable.cell(i, 1) + "\n";
+					Utilities.takeScreenshots();
 					flag = true;
 				}
 
 			} else if (datatable.cell(i, 1).equalsIgnoreCase("To field error")) {
 				try {
 					Assert.assertTrue(PageObjects.validateToErrorMsg(datatable.cell(i, 0)));
-
-					passedFields += datatable.cell(i, 1)+"\n";
+					Utilities.takeScreenshots();
+					passedFields += datatable.cell(i, 1) + "\n";
 
 				} catch (AssertionError e) {
-					failedFields += datatable.cell(i, 1)+"\n";
+					failedFields += datatable.cell(i, 1) + "\n";
+					Utilities.takeScreenshots();
 					flag = true;
 				}
 
