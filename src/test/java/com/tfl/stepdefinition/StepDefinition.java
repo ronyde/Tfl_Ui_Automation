@@ -1,5 +1,7 @@
 package com.tfl.stepdefinition;
 
+import static org.junit.Assert.fail;
+
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -140,12 +142,37 @@ public class StepDefinition {
 
 	@Then("I am not able to view {string} screen")
 	public void i_am_not_able_to_view_screen(String headerName) {
-		if(PageObjects.verifyPageTitleNotVisible(headerName)) {
+		if (PageObjects.verifyPageTitleNotVisible(headerName)) {
 			System.out.println("Journey Details page is getting displayed");
 			Assert.fail();
-		}
-		else
+		} else
 			System.out.println("Journey Details page is not getting displayed");
 	}
 
+	@Then("I click on recents tab")
+	public void i_click_on_recents_tab() {
+		String xpath = "//a[text()='Recents']";
+		PageObjects.click(xpath);
+	}
+
+	@Then("I verify recent journey details using {string} and {string}")
+	public void i_verify_recent_journey_details_using_and(String text1, String text2) {
+		if(PageObjects.validateRecentJourney(text1, text2)) {
+			System.out.println("Recent journey is showing correctly");
+		}
+		else {
+			System.out.println("Recent journey is not showing correctly");
+			Assert.fail();
+		}
+	}
+	@Then("I can see {string} error message")
+	public void i_can_see_error_message(String msg) {
+		if(PageObjects.valiDateErrMsg(msg)) {
+			System.out.println("Expected error msg is displayed");
+		}
+		else {
+			System.out.println("Expected error msg is not displayed");
+			Assert.fail();
+		}
+	}
 }

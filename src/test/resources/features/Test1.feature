@@ -1,6 +1,5 @@
 Feature: TFL able to plan journey with valid input
 
-  
   #We can have multiple data set here under examples to run the scripts
   Scenario Outline: Plan your journey with valid input
     Given I launch TFL Plan a journey Widget
@@ -20,6 +19,7 @@ Feature: TFL able to plan journey with valid input
       | Plan my journey | Button |
     Then I can able to view "Journey results" screen
     And I verify journey details have been shown
+    And I close the browser
 
     Examples: 
       | test_type | first from location              | first to location | second from location             | second to location |
